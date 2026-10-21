@@ -36,30 +36,82 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 
 data class AppInfo(
-    val icon : Int,
-    val name : String,
-    val description : String,
-    val category : String
+    val icon: Int,
+    val name: String,
+    val description: String,
+    val category: Category
 )
+
+enum class Category(val categoryName: String) {
+    VIDEO("Videos"),
+    MUSIC("Music"),
+    BOOKS("Books"),
+    SOCIAL("Social networks"),
+    GAMES("Games")
+}
 
 private val apps = listOf(
     AppInfo(
         icon = R.drawable.youtube_icon,
         name = "YouTube",
         description = "Official application for the world's largest video-sharing platform.",
-        category = "Video"
+        category = Category.VIDEO
     ),
+
     AppInfo(
         icon = R.drawable.twitch_icon,
         name = "Twitch",
         description = "Official application for the world's leading live-streaming and gaming community platform.",
-        category = "Streaming"
+        category = Category.VIDEO
     ),
+
+    AppInfo(
+        icon = R.drawable.youtube_music_icon,
+        name = "YouTube Music",
+        description = "Official application for the world's largest catalog of official tracks, live performances, and music videos.",
+        category = Category.MUSIC
+    ),
+
+    AppInfo(
+        icon = R.drawable.spotify_icon,
+        name = "Spotify",
+        description = "Official application for the world's leading music streaming, personalized discovery, and podcast platform.",
+        category = Category.MUSIC
+    ),
+
+    AppInfo(
+        icon = R.drawable.apple_books_icon,
+        name = "Apple Books",
+        description = "Official application for the world's premier digital reading, curated bookstore, and audiobook platform.",
+        category = Category.BOOKS
+    ),
+
+    AppInfo(
+        icon = R.drawable.google_books_icon,
+        name = "Google Books",
+        description = "Official application for the world's largest catalog of digital textbooks, public domain classics, and modern ebooks.",
+        category = Category.BOOKS
+    ),
+
+    AppInfo(
+        icon = R.drawable.instagram_icon,
+        name = "Instagram",
+        description = "Official application for the world's leading visual social network, content creation, and creator community platform.",
+        category = Category.SOCIAL
+    ),
+
+    AppInfo(
+        icon = R.drawable.telegram_icon,
+        name = "Telegram",
+        description = "Official application for the world's premier secure messaging, large-scale community channels, and cloud storage platform.",
+        category = Category.SOCIAL
+    ),
+
     AppInfo(
         icon = R.drawable.steam_icon,
         name = "Steam",
         description = "Official application for the world's premier PC gaming, store, and community platform.",
-        category = "Games"
+        category = Category.GAMES
     )
 )
 private val toolbarColor = Color(0xFF3F51B5)
@@ -99,7 +151,7 @@ private fun AppsToolbar() {
 }
 
 @Composable
-private fun AppsList(apps : List<AppInfo>) {
+private fun AppsList(apps: List<AppInfo>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -112,7 +164,7 @@ private fun AppsList(apps : List<AppInfo>) {
 }
 
 @Composable
-private fun AppCard(app : AppInfo) {
+private fun AppCard(app: AppInfo) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -163,7 +215,7 @@ private fun AppCard(app : AppInfo) {
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = app.category,
+                    text = app.category.categoryName,
                     color = toolbarColor,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -174,7 +226,7 @@ private fun AppCard(app : AppInfo) {
 }
 
 @Composable
-private fun AppIcon(icon : Int) {
+private fun AppIcon(icon: Int) {
     Image(
         painter = painterResource(id = icon),
         contentDescription = null,
