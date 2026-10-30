@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
-import com.example.myapp.model.AppInfo
+import com.example.myapp.domain.model.AppInfo
 import kotlin.math.roundToInt
 
 @Composable

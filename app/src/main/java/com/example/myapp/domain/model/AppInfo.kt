@@ -1,4 +1,4 @@
-package com.example.myapp.model
+package com.example.myapp.domain.model
 
 enum class AppCategory(val categoryName: String) {
     VIDEO("Videos"),

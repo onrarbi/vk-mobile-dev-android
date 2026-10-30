@@ -31,17 +31,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.R
-import com.example.myapp.model.AppInfo
+import com.example.myapp.domain.model.AppInfo
 import com.example.myapp.ui.components.AppCard
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.myapp.domain.repository.AppsRepository
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppListScreen(onAppClick: (AppInfo) -> Unit) {
-    val viewModel: AppsViewModel = viewModel()
+fun AppListScreen(onAppClick: (AppInfo) -> Unit, repository: AppsRepository) {
+    val factory = remember(repository) {
+        viewModelFactory {
+            initializer {
+                AppsViewModel(repository)
+            }
+        }
+    }
+
+    val viewModel: AppsViewModel = viewModel(factory = factory)
     val apps by viewModel.apps.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }

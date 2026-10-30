@@ -14,11 +14,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.myapp.model.AppInfo
+import com.example.myapp.domain.model.AppInfo
 
 @Composable
 fun AppDetailsScreen(
     app: AppInfo,
+    showcaseApps: List<AppInfo>,
     onBackClick: () -> Unit
 ) {
     var descriptionExpanded by rememberSaveable {
@@ -32,6 +33,7 @@ fun AppDetailsScreen(
     ) { contentPadding ->
         AppDetailsContent(
             appDetails = app,
+            showcaseApps = showcaseApps,
             descriptionExpanded = descriptionExpanded,
             onBackClick = onBackClick,
             onShareClick = {

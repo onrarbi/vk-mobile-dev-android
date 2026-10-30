@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapp.model.AppInfo
+import com.example.myapp.domain.model.AppInfo
 
 @Composable
 fun AppCard(app: AppInfo, onClick: () -> Unit) {

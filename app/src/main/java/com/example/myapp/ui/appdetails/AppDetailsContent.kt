@@ -13,11 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.myapp.model.AppInfo
+import com.example.myapp.domain.model.AppInfo
 
 @Composable
 fun AppDetailsContent(
     appDetails: AppInfo,
+    showcaseApps: List<AppInfo>,
     descriptionExpanded: Boolean,
     onBackClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -88,6 +89,7 @@ fun AppDetailsContent(
         Spacer(Modifier.height(24.dp))
 
         Showcase(
+            apps = showcaseApps,
             onAppClick = onBackClick
         )
     }
