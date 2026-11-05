@@ -16,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.myapp.R
 import com.example.myapp.domain.model.AppInfo
 import kotlin.math.roundToInt
@@ -35,19 +37,30 @@ fun AppDetailsHeader(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            painter = painterResource(id = app.icon),
-            contentDescription = null,
-            modifier = Modifier
-                .size(128.dp)
-                .clip(RoundedCornerShape(16.dp)),
-        )
+        val iconModifier = Modifier
+            .size(128.dp)
+            .clip(RoundedCornerShape(16.dp))
+
+        if (app.iconUrl != null) {
+            AsyncImage(
+                model = app.iconUrl,
+                contentDescription = app.name,
+                modifier = iconModifier,
+                contentScale = ContentScale.Crop
+            )
+        } else if (app.icon != null) {
+            Image(
+                painter = painterResource(id = app.icon),
+                contentDescription = app.name,
+                modifier = iconModifier
+            )
+        }
 
         Spacer(Modifier.width(16.dp))
 
         Column {
             Text(
-                text = app.appCategory.categoryName,
+                text = app.appCategory,
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 12.sp,
             )
@@ -60,36 +73,48 @@ fun AppDetailsHeader(
                 style = MaterialTheme.typography.headlineSmall,
             )
 
+            app.developer?.let { developer ->
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = developer,
+                    fontSize = 12.sp
+                )
+            }
+
             Spacer(Modifier.height(4.dp))
 
-            Text(
-                text = app.developer,
-                fontSize = 12.sp,
-            )
+            if (app.ageRating != null || app.size != null) {
+                Spacer(Modifier.height(4.dp))
 
-            Spacer(Modifier.height(4.dp))
+                Row {
+                    app.ageRating?.let { ageRating ->
+                        Column(Modifier.width(IntrinsicSize.Max)) {
+                            Text(
+                                text = "$ageRating+",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
 
-            Row {
-                Column(Modifier.width(IntrinsicSize.Max)) {
-                    Text(
-                        text = "${app.ageRating}+",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
+                            Spacer(Modifier.height(4.dp))
 
-                    Spacer(Modifier.height(4.dp))
+                            Text(text = stringResource(R.string.app_details_age))
+                        }
+                    }
 
-                    Text(text = stringResource(R.string.app_details_age))
-                }
+                    if (app.ageRating != null && app.size != null) {
+                        Spacer(Modifier.width(12.dp))
+                    }
 
-                Spacer(Modifier.width(12.dp))
+                    app.size?.let { size ->
+                        Column {
+                            Text(text = "${size.roundToInt()} MB")
 
-                Column {
-                    Text(text = "${app.size.roundToInt()} MB")
+                            Spacer(Modifier.height(4.dp))
 
-                    Spacer(Modifier.height(4.dp))
-
-                    Text(text = stringResource(R.string.app_details_size))
+                            Text(text = stringResource(R.string.app_details_size))
+                        }
+                    }
                 }
             }
         }

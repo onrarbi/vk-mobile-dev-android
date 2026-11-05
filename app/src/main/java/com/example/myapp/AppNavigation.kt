@@ -2,19 +2,22 @@ package com.example.myapp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
-import androidx.compose.runtime.remember
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapp.domain.repository.AppsRepository
 import com.example.myapp.ui.applist.AppListScreen
 import com.example.myapp.ui.appdetails.AppDetailsScreen
+import com.example.myapp.ui.applist.AppsViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
-fun AppNavigation(repository: AppsRepository) {
+fun AppNavigation() {
     val navController = rememberNavController()
 
-    val apps = remember(repository) { repository.getApps() }
+    val viewModel: AppsViewModel = hiltViewModel()
+    val apps by viewModel.apps.collectAsStateWithLifecycle()
 
     NavHost(
         navController = navController,
@@ -22,6 +25,7 @@ fun AppNavigation(repository: AppsRepository) {
     ) {
         composable("apps") {
             AppListScreen(
+                viewModel = viewModel,
                 onAppClick = { app ->
                     navController.navigate("details/${app.id}")
                 }

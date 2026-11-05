@@ -11,11 +11,12 @@ enum class AppCategory(val categoryName: String) {
 data class AppInfo(
     val id: String,
     val name: String,
-    val developer: String,
-    val appCategory: AppCategory,
-    val ageRating: Int,
-    val size: Float,
-    val icon: Int,
-    val screenshotUrls: List<String>,
+    val developer: String? = null,
+    val appCategory: String,
+    val ageRating: Int? = null,
+    val size: Float? = null,
+    val icon: Int? = null,
+    val iconUrl: String? = null,
+    val screenshotUrls: List<String> = emptyList(),
     val description: String
 )

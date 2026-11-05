@@ -9,7 +9,7 @@ fun AppInfoDto.toDomain(): AppInfo {
         id = id,
         name = name,
         developer = developer,
-        appCategory = AppCategory.valueOf(appCategory),
+        appCategory = AppCategory.valueOf(appCategory).categoryName,
         ageRating = ageRating,
         size = size,
         icon = icon,

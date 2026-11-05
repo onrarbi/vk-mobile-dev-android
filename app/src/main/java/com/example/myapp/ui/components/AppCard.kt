@@ -22,11 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.example.myapp.domain.model.AppInfo
 
 @Composable
@@ -43,7 +45,7 @@ fun AppCard(app: AppInfo, onClick: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AppIcon(icon = app.icon)
+            AppIcon(app = app)
 
             Spacer(modifier = Modifier.width(16.dp))
 
@@ -82,7 +84,7 @@ fun AppCard(app: AppInfo, onClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = app.appCategory.categoryName,
+                    text = app.appCategory,
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium
@@ -93,10 +95,19 @@ fun AppCard(app: AppInfo, onClick: () -> Unit) {
 }
 
 @Composable
-private fun AppIcon(icon: Int) {
-    Image(
-        painter = painterResource(id = icon),
-        contentDescription = null,
-        modifier = Modifier.size(48.dp)
-    )
+private fun AppIcon(app: AppInfo) {
+    if (app.iconUrl != null) {
+        AsyncImage(
+            model = app.iconUrl,
+            contentDescription = app.name,
+            modifier = Modifier.size(48.dp),
+            contentScale = ContentScale.Crop
+        )
+    } else if (app.icon != null) {
+        Image(
+            painter = painterResource(id = app.icon),
+            contentDescription = app.name,
+            modifier = Modifier.size(48.dp)
+        )
+    }
 }

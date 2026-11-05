@@ -71,20 +71,22 @@ fun AppDetailsContent(
 
         Spacer(Modifier.height(12.dp))
 
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            color = MaterialTheme.colorScheme.outlineVariant,
-        )
+        appDetails.developer?.let { developerName ->
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = MaterialTheme.colorScheme.outlineVariant
+            )
 
-        Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(12.dp))
 
-        Developer(
-            name = appDetails.developer,
-            onClick = onDeveloperClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp),
-        )
+            Developer(
+                name = developerName,
+                onClick = onDeveloperClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp)
+            )
+        }
 
         Spacer(Modifier.height(24.dp))
 
