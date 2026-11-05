@@ -6,16 +6,14 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myapp.data.repository.AppRepositoryImpl
 import com.example.myapp.domain.repository.AppsRepository
 import com.example.myapp.ui.applist.AppListScreen
 import com.example.myapp.ui.appdetails.AppDetailsScreen
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(repository: AppsRepository) {
     val navController = rememberNavController()
 
-    val repository: AppsRepository = remember { AppRepositoryImpl() }
     val apps = remember(repository) { repository.getApps() }
 
     NavHost(
@@ -26,8 +24,7 @@ fun AppNavigation() {
             AppListScreen(
                 onAppClick = { app ->
                     navController.navigate("details/${app.id}")
-                },
-                repository = repository
+                }
             )
         }
 
