@@ -14,6 +14,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapp.domain.model.AppInfo
 
 @Composable
@@ -26,6 +28,10 @@ fun AppDetailsScreen(
         mutableStateOf(false)
     }
 
+    val viewModel: AppDetailsViewModel = hiltViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val installState = (state as AppDetailsState.Content).installState
+
     val context = LocalContext.current
 
     Scaffold(
@@ -35,6 +41,7 @@ fun AppDetailsScreen(
             appDetails = app,
             showcaseApps = showcaseApps,
             descriptionExpanded = descriptionExpanded,
+            installState = installState,
             onBackClick = onBackClick,
             onShareClick = {
                 val intent = Intent(Intent.ACTION_SEND).apply {
@@ -50,11 +57,7 @@ fun AppDetailsScreen(
                 )
             },
             onInstallClick = {
-                Toast.makeText(
-                    context,
-                    "Under development",
-                    Toast.LENGTH_SHORT
-                ).show()
+                viewModel.onInstallClick()
             },
             onReadMoreClick = {
                 descriptionExpanded = true

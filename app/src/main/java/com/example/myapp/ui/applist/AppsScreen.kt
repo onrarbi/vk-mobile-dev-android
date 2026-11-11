@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -46,6 +48,10 @@ fun AppListScreen(viewModel: AppsViewModel, onAppClick: (AppInfo) -> Unit) {
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val error by viewModel.error.collectAsStateWithLifecycle()
 
+    val ratings by viewModel.ratings.collectAsStateWithLifecycle()
+    val ratingsLoading by viewModel.ratingsLoading.collectAsStateWithLifecycle()
+    val ratingsResult by viewModel.ratingsResult.collectAsStateWithLifecycle()
+
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -66,6 +72,40 @@ fun AppListScreen(viewModel: AppsViewModel, onAppClick: (AppInfo) -> Unit) {
                     }
                 }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    onClick = { viewModel.loadRatings(parallel = false) },
+                    enabled = !ratingsLoading
+                ) {
+                    Text("Sequential")
+                }
+
+                Button(
+                    onClick = { viewModel.loadRatings(parallel = true) },
+                    enabled = !ratingsLoading
+                ) {
+                    Text("Parallel")
+                }
+            }
+
+            if (ratingsLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            ratingsResult?.let { result ->
+                Text(
+                    text = result,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
 
             when {
                 isLoading -> {
@@ -88,7 +128,7 @@ fun AppListScreen(viewModel: AppsViewModel, onAppClick: (AppInfo) -> Unit) {
                 }
 
                 else -> {
-                    AppsList(apps = apps, onAppClick = onAppClick)
+                    AppsList(apps = apps, ratings = ratings, onAppClick = onAppClick)
                 }
             }
         }
@@ -119,14 +159,14 @@ private fun AppsToolbar(onClick: () -> Unit) {
 }
 
 @Composable
-private fun AppsList(apps: List<AppInfo>, onAppClick: (AppInfo) -> Unit) {
+private fun AppsList(apps: List<AppInfo>, ratings: Map<String, Float>, onAppClick: (AppInfo) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(apps, key = { it.id }) { app ->
-            AppCard(app = app, onClick = {onAppClick(app)})
+            AppCard(app = app, rating = ratings[app.id], onClick = {onAppClick(app)})
         }
     }
 }

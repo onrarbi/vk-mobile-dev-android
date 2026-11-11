@@ -32,7 +32,7 @@ import coil3.compose.AsyncImage
 import com.example.myapp.domain.model.AppInfo
 
 @Composable
-fun AppCard(app: AppInfo, onClick: () -> Unit) {
+fun AppCard(app: AppInfo, rating: Float? = null, onClick: () -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -58,6 +58,14 @@ fun AppCard(app: AppInfo, onClick: () -> Unit) {
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold
                 )
+
+                rating?.let {
+                    Text(
+                        text = "★ $it",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 14.sp
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(4.dp))
 
