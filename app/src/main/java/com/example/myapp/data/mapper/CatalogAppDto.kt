@@ -12,3 +12,13 @@ fun CatalogAppDto.toDomain(): AppInfo {
         description = description
     )
 }
+
+fun AppInfo.toCatalogDto(): CatalogAppDto {
+    return CatalogAppDto(
+        id = id,
+        name = name,
+        description = description,
+        category = appCategory,
+        iconUrl = requireNotNull(iconUrl) { "Catalog app must have an icon URL" },
+    )
+}

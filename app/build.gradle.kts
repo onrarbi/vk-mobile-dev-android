@@ -64,4 +64,7 @@ dependencies {
     implementation(libs.androidx.hilt.viewmodel.compose)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation(libs.junit)
 }
