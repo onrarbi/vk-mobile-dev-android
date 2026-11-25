@@ -26,12 +26,16 @@ fun AppDetailsContent(
     onInstallClick: () -> Unit,
     onReadMoreClick: () -> Unit,
     onDeveloperClick: () -> Unit,
+    isInWishlist: Boolean,
+    onWishlistClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier.verticalScroll(rememberScrollState())) {
         Toolbar(
             onBackClick = onBackClick,
             onShareClick = onShareClick,
+            isInWishlist = isInWishlist,
+            onWishlistClick = onWishlistClick
         )
 
         Spacer(Modifier.height(8.dp))

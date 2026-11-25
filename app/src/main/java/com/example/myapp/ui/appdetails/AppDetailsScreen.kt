@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,6 +32,12 @@ fun AppDetailsScreen(
     val viewModel: AppDetailsViewModel = hiltViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val installState = (state as AppDetailsState.Content).installState
+
+    LaunchedEffect(app.id) {
+        viewModel.observeWishlist(app)
+    }
+
+    val isInWishlist = (state as AppDetailsState.Content).isInWishlist
 
     val context = LocalContext.current
 
@@ -70,6 +77,10 @@ fun AppDetailsScreen(
                     "Under development",
                     Toast.LENGTH_SHORT
                 ).show()
+            },
+            isInWishlist = isInWishlist,
+            onWishlistClick = {
+                viewModel.toggleWishlist(app)
             },
             modifier = Modifier
                 .fillMaxSize()

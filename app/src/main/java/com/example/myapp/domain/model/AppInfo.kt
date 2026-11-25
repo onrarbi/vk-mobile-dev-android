@@ -18,5 +18,6 @@ data class AppInfo(
     val icon: Int? = null,
     val iconUrl: String? = null,
     val screenshotUrls: List<String> = emptyList(),
-    val description: String
+    val description: String,
+    val isInWishlist: Boolean = false
 )

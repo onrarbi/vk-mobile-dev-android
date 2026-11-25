@@ -2,6 +2,8 @@ package com.example.myapp.ui.appdetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapp.domain.model.AppInfo
+import com.example.myapp.domain.repository.WishlistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -12,12 +14,39 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AppDetailsViewModel @Inject constructor() : ViewModel() {
+class AppDetailsViewModel @Inject constructor(
+    private val wishlistRepository: WishlistRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<AppDetailsState>(AppDetailsState.Content())
 
     val state = _state.asStateFlow()
 
     private var installJob: Job? = null
+    private var wishlistJob: Job? = null
+
+    fun observeWishlist(app: AppInfo) {
+        wishlistJob?.cancel()
+
+        wishlistJob = viewModelScope.launch {
+            wishlistRepository.observeAppDetails(app).collect { updatedApp ->
+                _state.update { current ->
+                    if (current is AppDetailsState.Content) {
+                        current.copy(
+                            isInWishlist = updatedApp.isInWishlist
+                        )
+                    } else {
+                        current
+                    }
+                }
+            }
+        }
+    }
+
+    fun toggleWishlist(app: AppInfo) {
+        viewModelScope.launch {
+            wishlistRepository.toggleWishlist(app)
+        }
+    }
 
     fun onInstallClick() {
         val current = _state.value

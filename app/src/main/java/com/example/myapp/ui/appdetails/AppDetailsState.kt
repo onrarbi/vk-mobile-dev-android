@@ -9,5 +9,7 @@ sealed interface InstallState {
 }
 
 sealed interface AppDetailsState {
-    data class Content(val installState: InstallState = InstallState.NotInstalled) : AppDetailsState
-}
+    data class Content(
+        val installState: InstallState = InstallState.NotInstalled,
+        val isInWishlist: Boolean = false
+    ) : AppDetailsState}
